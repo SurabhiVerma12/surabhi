@@ -2,9 +2,11 @@ package com.sample.weatherreport;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -15,11 +17,13 @@ public class WeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+
         if (savedInstanceState == null) {
            getSupportFragmentManager().beginTransaction()
                    .add(R.id.container, new WeatherActivityFragment())
                    .commit();
         }
+
     }
 
 
@@ -33,7 +37,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.change_city){
-            showSelectionDialogue();
+           showSelectionDialogue();
         }
         return false;
     }
@@ -57,8 +61,8 @@ public class WeatherActivity extends AppCompatActivity {
     public void enterCity(String city){
         WeatherActivityFragment wf = (WeatherActivityFragment)getSupportFragmentManager()
                 .findFragmentById(R.id.container);
-
         wf.enterCity(city);
+        new PlacePreference(this).setCity(city);
 
 
     }

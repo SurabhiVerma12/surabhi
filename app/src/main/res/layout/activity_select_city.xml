@@ -9,24 +9,32 @@
     <TextView android:text="@string/select_city"
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
     <EditText
-        android:id="@+id/cityName"
+        android:id="@+id/cityValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="5dp"
-        android:imeOptions="actionSearch"
         android:inputType="text" >
         <requestFocus />
     </EditText>
 
-    <ListView android:id="@+id/cityList"
+    <Button
+        android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cityName"
-        android:layout_marginTop="3dp"/>
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/cityValue"
+        android:layout_marginTop="5dp"
+        />
 
-
+    <TextView android:text="@string/current_location"
+        android:id="@+id/current_location"
+        android:layout_below="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

@@ -1,12 +1,16 @@
 package com.sample.weatherreport;
-
-import org.json.JSONObject;
 import android.content.Context;
-
+import android.graphics.Bitmap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -15,8 +19,7 @@ import java.net.URL;
 public class FetchWeather {
 
     private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
-
-    public static JSONObject getJSON (Context context , String place){
+    public static String getJSON (Context context , String place){
         URL url = null;
         try {
             url = new URL(String.format(OPEN_WEATHER_MAP_API, place));
@@ -31,12 +34,8 @@ public class FetchWeather {
                 json.append(tmp).append("\n");
             reader.close();
 
-            JSONObject data = new JSONObject(json.toString());
-            if(data.getInt("cod") != 200){
-                return null;
-            }
 
-            return data;
+            return json.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
