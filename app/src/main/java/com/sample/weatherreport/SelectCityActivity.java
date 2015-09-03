@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SelectCityActivity extends AppCompatActivity {
     EditText edtText ;
@@ -24,9 +25,16 @@ public class SelectCityActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectCityActivity.this , WeatherActivity.class);
-                intent.putExtra("cityName",edtText.getText().toString());
-                startActivity(intent);
+                if(edtText.getText().toString()==null || (edtText.getText().toString().trim()).equals("")){
+                    Toast.makeText(SelectCityActivity.this,getString(R.string.field_blank), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Intent intent = new Intent(SelectCityActivity.this , TabHostActivity.class);
+                    intent.putExtra("cityName",edtText.getText().toString());
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         });
 

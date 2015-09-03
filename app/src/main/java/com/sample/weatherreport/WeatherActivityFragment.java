@@ -1,15 +1,16 @@
 package com.sample.weatherreport;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +51,8 @@ public class WeatherActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showWeatherDetails(new PlacePreference(getActivity()).getCity());
+        showWeatherDetails(TabHostActivity.globaLData);
+
     }
 
     private void showWeatherDetails(final String city){
@@ -103,10 +105,6 @@ public class WeatherActivityFragment extends Fragment {
         }
     }
 
-
-    public void enterCity(String city){
-        showWeatherDetails(city);
-    }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
