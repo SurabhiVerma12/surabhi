@@ -22,9 +22,11 @@
             android:name=".TabHostActivity"
             android:label="@string/title_activity_tab_host"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
-
         </activity>
-
+        <activity
+            android:name=".DailyWeatherActivity"
+            android:label="@string/title_activity_daily_weather" >
+        </activity>
     </application>
 
 </manifest>

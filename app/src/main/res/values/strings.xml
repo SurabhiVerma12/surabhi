@@ -17,5 +17,6 @@
     <string name="title_activity_tabs_pager_adapter">TabsPagerAdapter</string>
     <string name="title_activity_location_fragment">LocationFragment</string>
     <string name="field_blank">Field cannot be left blank</string>
+    <string name="title_activity_daily_weather">DailyWeatherActivity</string>
 
 </resources>

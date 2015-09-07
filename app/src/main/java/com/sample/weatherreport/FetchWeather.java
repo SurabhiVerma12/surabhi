@@ -18,11 +18,11 @@ import java.net.URL;
  */
 public class FetchWeather {
 
-    private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
-    public static String getJSON (Context context , String place){
+
+    public static String getJSON (Context context , String place,String url1){
         URL url = null;
         try {
-            url = new URL(String.format(OPEN_WEATHER_MAP_API, place));
+            url = new URL(String.format(url1, place));
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
             BufferedReader reader = new BufferedReader(

@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sample.weatherreport.DailyWeatherActivity">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relLayout"
+        android:background="#ADD8E6"
+        >
+        <TextView
+            android:id="@+id/current_city" android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30sp"
+            android:padding="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/current_icon"
+            android:layout_width="100dp"
+            android:layout_below="@+id/current_city"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:id="@+id/current_temp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="50sp"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    <ListView android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/relLayout"
+        android:layout_height="fill_parent"
+        android:transcriptMode="alwaysScroll"
+        android:cacheColorHint="#00000000"
+        android:listSelector="@android:color/transparent"/>
+
+</RelativeLayout>

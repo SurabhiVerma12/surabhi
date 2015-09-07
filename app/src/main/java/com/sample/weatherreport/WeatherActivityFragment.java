@@ -29,6 +29,7 @@ public class WeatherActivityFragment extends Fragment {
     TextView updatedField;
     Handler handler;
     private static String IMG_URL = "http://openweathermap.org/img/w/";
+    private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
 
     public WeatherActivityFragment(){
         handler = new Handler();
@@ -42,7 +43,7 @@ public class WeatherActivityFragment extends Fragment {
         detailed_value = (TextView)rootView.findViewById(R.id.details_field);
         currentTemperature = (TextView)rootView.findViewById(R.id.current_temperature_field);
         weatherIcon=(ImageView)rootView.findViewById(R.id.weather_icon);
-        maxMinTemp=(TextView)rootView.findViewById(R.id.max_min);
+       // maxMinTemp=(TextView)rootView.findViewById(R.id.max_min);
         updatedField =(TextView)rootView.findViewById(R.id.updated_field);
 
         return rootView;
@@ -58,7 +59,7 @@ public class WeatherActivityFragment extends Fragment {
     private void showWeatherDetails(final String city){
         new Thread(){
             public void run(){
-                final String json = FetchWeather.getJSON(getActivity(), city);
+                final String json = FetchWeather.getJSON(getActivity(),city,OPEN_WEATHER_MAP_API);
                 Log.d("json value   ",json+"" );
                 if(json == null){
                     handler.post(new Runnable(){
@@ -85,7 +86,7 @@ public class WeatherActivityFragment extends Fragment {
         try {
             weather = JSONWeatherParser.getWeather(json);
             String url = IMG_URL+weather.currentCondition.getIcon().concat(".png");
-            new DownloadImageTask(weatherIcon).execute(url);
+            ((TabHostActivity)getActivity()).new DownloadImageTask(weatherIcon).execute(url);
             cityName.setText(weather.location.getCity() + "," + weather.location.getCountry());
             detailed_value.setText(
                     weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")" +
@@ -94,7 +95,9 @@ public class WeatherActivityFragment extends Fragment {
                             "\n" + "WindSpeed:" +  weather.wind.getSpeed()+ "mps"
             );
             currentTemperature.setText(String.format("%.2f", weather.temperature.getTemp())+ " ℃");
-            maxMinTemp.setText("Temprature varies from " + String.format("%.2f", weather.temperature.getMinTemp())+ " ℃" +" - " +String.format("%.2f", weather.temperature.getMaxTemp())+ " ℃");
+            new PlacePreference(getActivity()).setTemp(weather.temperature.getTemp() + "");
+            new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon()+"");
+           // maxMinTemp.setText("Temprature varies from " + String.format("%.2f", weather.temperature.getMinTemp())+ " ℃" +" - " +String.format("%.2f", weather.temperature.getMaxTemp())+ " ℃");
 
             DateFormat df = DateFormat.getDateTimeInstance();
             String updatedOn = df.format(new Date(weather.location.getDate()*1000));
@@ -105,29 +108,4 @@ public class WeatherActivityFragment extends Fragment {
         }
     }
 
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }
