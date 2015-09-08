@@ -2,6 +2,7 @@ package com.sample.weatherreport;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,9 +29,11 @@ public class DailyWeatherActivity extends Fragment {
     ImageView current_icon;
     private static String OPEN_WEATHER_MAP_DAILY_API = "http://api.openweathermap.org/data/2.5/forecast/daily?q=%s&mode=json&units=metric&cnt=7";
     private static String IMG_URL = "http://openweathermap.org/img/w/";
+    private ProgressDialog dialog = null;
 
     public DailyWeatherActivity()
     {
+
         handler = new Handler();
     }
 
@@ -42,6 +45,7 @@ public class DailyWeatherActivity extends Fragment {
         current_city=(TextView)rootView.findViewById(R.id.current_city);
         current_temp=(TextView)rootView.findViewById(R.id.current_temp);
         current_icon=(ImageView)rootView.findViewById(R.id.current_icon);
+        dialog = ProgressDialog.show(getActivity(), "", "Please wait..Loading your weather Details", true);
 
         return rootView;
     }
@@ -50,7 +54,6 @@ public class DailyWeatherActivity extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayDailyWeather(TabHostActivity.globaLData);
-
     }
 
     private void displayDailyWeather(final String city){
@@ -85,6 +88,7 @@ public class DailyWeatherActivity extends Fragment {
             current_city.setText(WeaFore.get(0).weather.location.getCity());
             current_temp.setText(new PlacePreference(getActivity()).getTemp()+" ℃");
             ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL+new PlacePreference(getActivity()).getIcon().concat(".png"));
+            dialog.dismiss();
         } catch (JSONException e) {
             e.printStackTrace();
         };

@@ -15,25 +15,24 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="20sp"
         />
-    <EditText
-        android:id="@+id/cityValue_fragment"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_below="@+id/textView1_fragment"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1_fragment"
-        android:layout_marginTop="5dp"
-        android:inputType="text" >
+        android:layout_alignParentStart="true">
         <requestFocus />
-    </EditText>
+    </AutoCompleteTextView>
 
-    <Button
-        android:id="@+id/submit_fragment"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1_fragment"
-        android:layout_marginTop="5dp"
-        android:text="SUBMIT"
+    <ListView
+        android:id="@+id/list_city"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/autoCompleteTextView1"
         />
+
+
 
 </RelativeLayout>

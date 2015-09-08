@@ -40,4 +40,13 @@ public class PlacePreference {
     {
         prefs.edit().putString("icon", icon).commit();
     }
+
+    Boolean getFirstRun(){
+        return prefs.getBoolean("firstRun", false);
+    }
+
+    void setFirstRun(Boolean firstRun)
+    {
+        prefs.edit().putBoolean("firstRun", true).commit();
+    }
 }

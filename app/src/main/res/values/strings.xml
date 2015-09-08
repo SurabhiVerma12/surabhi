@@ -7,10 +7,10 @@
     <string name="change_city">Change city</string>
     <string name="title_activity_weather">WeatherActivity</string>
     <string name="title_activity_select_city">SelectCityActivity</string>
-    <string name="select_city">Enter name of the City</string>
-    <string name="current_location">Get the current location</string>
+    <string name="or_use">or Use</string>
+    <string name="select_city">Choose a Location</string>
+    <string name="current_location">Allow the application to choose the current location</string>
     <string name="title_activity_tab_host">TabHostActivity</string>
-
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

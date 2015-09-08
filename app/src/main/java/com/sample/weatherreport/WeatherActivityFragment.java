@@ -1,4 +1,5 @@
 package com.sample.weatherreport;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -30,8 +31,10 @@ public class WeatherActivityFragment extends Fragment {
     Handler handler;
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
+    private ProgressDialog dialog = null;
 
     public WeatherActivityFragment(){
+
         handler = new Handler();
     }
 
@@ -43,8 +46,8 @@ public class WeatherActivityFragment extends Fragment {
         detailed_value = (TextView)rootView.findViewById(R.id.details_field);
         currentTemperature = (TextView)rootView.findViewById(R.id.current_temperature_field);
         weatherIcon=(ImageView)rootView.findViewById(R.id.weather_icon);
-       // maxMinTemp=(TextView)rootView.findViewById(R.id.max_min);
         updatedField =(TextView)rootView.findViewById(R.id.updated_field);
+        dialog = ProgressDialog.show(getActivity(), "","Please wait..Loading your weather Details", true);
 
         return rootView;
     }
@@ -97,11 +100,10 @@ public class WeatherActivityFragment extends Fragment {
             currentTemperature.setText(String.format("%.2f", weather.temperature.getTemp())+ " ℃");
             new PlacePreference(getActivity()).setTemp(weather.temperature.getTemp() + "");
             new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon()+"");
-           // maxMinTemp.setText("Temprature varies from " + String.format("%.2f", weather.temperature.getMinTemp())+ " ℃" +" - " +String.format("%.2f", weather.temperature.getMaxTemp())+ " ℃");
-
             DateFormat df = DateFormat.getDateTimeInstance();
             String updatedOn = df.format(new Date(weather.location.getDate()*1000));
             updatedField.setText("Last update: " + updatedOn);
+            dialog.dismiss();
 
         } catch (JSONException e) {
             e.printStackTrace();
