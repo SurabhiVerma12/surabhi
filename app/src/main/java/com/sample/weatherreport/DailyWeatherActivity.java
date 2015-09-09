@@ -15,10 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sample.weatherreport.adapter.WeatherAdapter;
+import com.sample.weatherreport.parser.FetchWeather;
+import com.sample.weatherreport.parser.JSONDailyWeatherParser;
 
 import org.json.JSONException;
 
-import java.io.InputStream;
 import java.util.List;
 
 public class DailyWeatherActivity extends Fragment {
@@ -53,13 +54,13 @@ public class DailyWeatherActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        displayDailyWeather(TabHostActivity.globaLData);
+        displayDailyWeather(new PlacePreference(getActivity()).getCity());
     }
 
     private void displayDailyWeather(final String city){
         new Thread(){
             public void run(){
-                final String json = FetchWeather.getJSON(getActivity(),city,OPEN_WEATHER_MAP_DAILY_API);
+                final String json = FetchWeather.getJSON(getActivity(), city, OPEN_WEATHER_MAP_DAILY_API);
                 Log.d("json value   ", json + "");
                 if(json == null){
                     handler.post(new Runnable(){
@@ -67,6 +68,8 @@ public class DailyWeatherActivity extends Fragment {
                             Toast.makeText(getActivity(),
                                     getActivity().getString(R.string.place_not_found),
                                     Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                            getActivity().finish();
                         }
                     });
                 } else {
@@ -87,7 +90,7 @@ public class DailyWeatherActivity extends Fragment {
             myList.setAdapter(new WeatherAdapter(getActivity(), WeaFore));
             current_city.setText(WeaFore.get(0).weather.location.getCity());
             current_temp.setText(new PlacePreference(getActivity()).getTemp()+" ℃");
-            ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL+new PlacePreference(getActivity()).getIcon().concat(".png"));
+            ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL + new PlacePreference(getActivity()).getIcon().concat(".png"));
             dialog.dismiss();
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,6 +1,9 @@
-package com.sample.weatherreport;
+package com.sample.weatherreport.parser;
 
 import android.util.Log;
+
+import com.sample.weatherreport.DailyForecast;
+import com.sample.weatherreport.LocationTracking;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -11,6 +11,7 @@
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:padding="10dp"
+        style="@style/MyTextViewHeaderTheme"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
@@ -26,7 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/details_field"
+        android:layout_below="@+id/wind_field"
+        android:layout_marginTop="30dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="60sp" />
 
@@ -37,22 +39,79 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/weather_icon"
-        android:padding="10dp"
         android:layout_marginTop="10dp"
+        android:textColor="#2B60DE"
+        android:textStyle="bold"
+        android:textSize="25dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+
+    <TextView
+        android:id="@+id/humid_field_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="HUMIDITY     :     "
+        android:layout_below="@+id/details_field"
+        style="@style/MyTextViewTheme"
+        />
+
+    <TextView
+        android:id="@+id/humid_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/humid_field_text"
+        android:layout_below="@+id/details_field"
+        style="@style/MyTextViewValueTheme"
+        />
+    <TextView
+        android:id="@+id/pressure_field_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PRESSURE     :     "
+        android:layout_below="@+id/humid_field"
+        style="@style/MyTextViewTheme"
+        />
+
+    <TextView
+        android:id="@+id/pressure_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/pressure_field_text"
+        android:layout_below="@+id/humid_field"
+        style="@style/MyTextViewValueTheme"
+        />
+
+    <TextView
+        android:id="@+id/wind_field_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="WIND SPEED  :     "
+        android:layout_below="@+id/pressure_field"
+        style="@style/MyTextViewTheme"
+        />
+
+    <TextView
+        android:id="@+id/wind_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/pressure_field"
+        android:layout_toRightOf="@+id/wind_field_text"
+        style="@style/MyTextViewValueTheme"
         />
 
     <TextView
         android:id="@+id/updated_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        style="@style/MyTextViewValueTheme"
+        android:layout_below="@+id/current_temperature_field"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         />
-
-
-
 
 </RelativeLayout>

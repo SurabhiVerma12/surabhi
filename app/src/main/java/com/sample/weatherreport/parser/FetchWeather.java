@@ -1,4 +1,4 @@
-package com.sample.weatherreport;
+package com.sample.weatherreport.parser;
 import android.content.Context;
 import android.graphics.Bitmap;
 import java.io.BufferedInputStream;
@@ -17,7 +17,6 @@ import java.net.URL;
  * Created by surabhiv on 9/1/2015.
  */
 public class FetchWeather {
-
 
     public static String getJSON (Context context , String place,String url1){
         URL url = null;

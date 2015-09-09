@@ -16,7 +16,7 @@
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_day"
-        android:textSize="15sp"
+        style="@style/MyListTheme"
         android:padding="10dp"
         android:layout_toRightOf="@+id/text_image"
         android:layout_marginLeft="5dp"/>
@@ -24,7 +24,7 @@
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_clouds"
-        android:textSize="15sp"
+        style="@style/MyListTheme"
         android:padding="10dp"
         android:layout_toRightOf="@+id/text_day"
         android:layout_marginLeft="5dp"/>
@@ -32,7 +32,7 @@
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_temp"
-        android:textSize="15sp"
+        style="@style/MyListTheme"
         android:padding="20dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dp"/>

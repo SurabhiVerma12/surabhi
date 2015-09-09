@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -17,7 +19,7 @@ import android.widget.ImageView;
 import java.io.InputStream;
 
 public class TabHostActivity extends FragmentActivity implements LocationFragment.LocationValueListener{
-    public static String globaLData;
+   // public static String globaLData;
     private ActionBar actionBar;
     ActionBar.Tab Tab1, Tab2,Tab3;
     Fragment fragmentTab1 = new LocationFragment();
@@ -32,7 +34,7 @@ public class TabHostActivity extends FragmentActivity implements LocationFragmen
         actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+        ActionBar bar = getActionBar();
         Tab1 = actionBar.newTab().setText("LOCATION");
         Tab2 = actionBar.newTab().setText("NOW");
         Tab3 = actionBar.newTab().setText("DAILY");
@@ -48,11 +50,12 @@ public class TabHostActivity extends FragmentActivity implements LocationFragmen
         if(getIntent().getStringExtra("cityName")!=null){
            passData(getIntent().getStringExtra("cityName"));
         }
+        this.setTitle("Weather Report");
     }
 
     @Override
     public void passData(String data) {
-        globaLData=data;
+        new PlacePreference(this).setCity(data);
         actionBar.selectTab(Tab2);
     }
 

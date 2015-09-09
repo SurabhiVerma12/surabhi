@@ -47,6 +47,6 @@ public class PlacePreference {
 
     void setFirstRun(Boolean firstRun)
     {
-        prefs.edit().putBoolean("firstRun", true).commit();
+        prefs.edit().putBoolean("firstRun", firstRun).commit();
     }
 }

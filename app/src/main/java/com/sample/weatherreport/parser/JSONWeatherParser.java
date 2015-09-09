@@ -1,4 +1,7 @@
-package com.sample.weatherreport;
+package com.sample.weatherreport.parser;
+
+import com.sample.weatherreport.LocationTracking;
+import com.sample.weatherreport.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;

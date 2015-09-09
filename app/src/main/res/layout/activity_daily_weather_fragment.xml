@@ -12,7 +12,7 @@
             android:id="@+id/current_city" android:layout_width="wrap_content"
             android:layout_alignParentLeft="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="30sp"
+            style="@style/MyTextViewHeaderTheme"
             android:padding="10dp"
             android:layout_marginTop="30dp"
             android:layout_height="wrap_content" />
