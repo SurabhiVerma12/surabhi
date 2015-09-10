@@ -20,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -55,10 +57,16 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
                         if (gps.canGetLocation()) {
                             latitude = gps.getLatitude();
                             longitude = gps.getLongitude();
-                            dialog = ProgressDialog.show(SelectCityActivity.this, "", "Please wait..", true);
-                            GetCurrentAddress currentadd = new GetCurrentAddress();
-                            currentadd.execute();
-                            new PlacePreference(SelectCityActivity.this).setFirstRun(true);
+                            Log.d("latitude sur " ,latitude +" "+longitude);
+                            if(latitude==0.0 || longitude==0.0){
+                                Toast.makeText(SelectCityActivity.this,"Please wait till GPS gets your location",Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                dialog = ProgressDialog.show(SelectCityActivity.this, "", "Please wait..", true);
+                                GetCurrentAddress currentadd = new GetCurrentAddress();
+                                currentadd.execute();
+                                new PlacePreference(SelectCityActivity.this).setFirstRun(true);
+                            }
 
                         } else {
                             gps.showSettingsAlert();
@@ -89,6 +97,7 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
             String segments[] = str.split(",");
             String cityName=segments[0];
             intent.putExtra("cityName", cityName);
+            intent.putExtra("str",str);
             hideSoftkeyboard();
             new PlacePreference(SelectCityActivity.this).setFirstRun(true);
             startActivity(intent);
@@ -150,6 +159,7 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
             hideSoftkeyboard();
             Intent intent = new Intent(SelectCityActivity.this, TabHostActivity.class);
             intent.putExtra("cityName", address);
+            intent.putExtra("str", address);
             startActivity(intent);
             finish();
 

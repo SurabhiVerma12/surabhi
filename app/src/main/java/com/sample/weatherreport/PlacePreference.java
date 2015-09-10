@@ -45,6 +45,14 @@ public class PlacePreference {
         return prefs.getBoolean("firstRun", false);
     }
 
+    void setFirstValue(Boolean firstValue)
+    {
+        prefs.edit().putBoolean("firstValue", firstValue).commit();
+    }
+    public Boolean getfirstValue(){
+        return prefs.getBoolean("firstValue", true);
+    }
+
     void setFirstRun(Boolean firstRun)
     {
         prefs.edit().putBoolean("firstRun", firstRun).commit();

@@ -11,45 +11,56 @@ import org.json.JSONObject;
  * Created by surabhiv on 9/2/2015.
  */
 public class JSONWeatherParser {
-    public static Weather getWeather(String data) throws JSONException {
+    public static Weather getWeather(String data)  {
         Weather weather = new Weather();
-        JSONObject jObj = new JSONObject(data);
         LocationTracking loc = new LocationTracking();
-        JSONObject coordObj = getObject("coord", jObj);
-        loc.setLatitude(getFloat("lat", coordObj));
-        loc.setLongitude(getFloat("lon", coordObj));
+        JSONObject jObj = null;
+        try {
+            jObj = new JSONObject(data);
+            JSONObject coordObj = getObject("coord", jObj);
+            loc.setLatitude(getFloat("lat", coordObj));
+            loc.setLongitude(getFloat("lon", coordObj));
 
-        JSONObject sysObj = getObject("sys", jObj);
-        loc.setCountry(getString("country", sysObj));
-        loc.setSunrise(getInt("sunrise", sysObj));
-        loc.setSunset(getInt("sunset", sysObj));
-        loc.setCity(getString("name", jObj));
-
-
-        loc.setDate(getInt("dt",jObj));
-        weather.location = loc;
-
-
-        JSONArray jArr = jObj.getJSONArray("weather");
-
-
-        JSONObject JSONWeather = jArr.getJSONObject(0);
-        weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
-        weather.currentCondition.setDescr(getString("description", JSONWeather));
-        weather.currentCondition.setCondition(getString("main", JSONWeather));
-        weather.currentCondition.setIcon(getString("icon", JSONWeather));
-
-        JSONObject mainObj = getObject("main", jObj);
-        weather.currentCondition.setHumidity(getInt("humidity", mainObj));
-        weather.currentCondition.setPressure(getInt("pressure", mainObj));
-        weather.temperature.setMaxTemp(getFloat("temp_max", mainObj));
-        weather.temperature.setMinTemp(getFloat("temp_min", mainObj));
-        weather.temperature.setTemp(getFloat("temp", mainObj));
+            JSONObject sysObj = getObject("sys", jObj);
+            loc.setCountry(getString("country", sysObj));
+            loc.setSunrise(getInt("sunrise", sysObj));
+            loc.setSunset(getInt("sunset", sysObj));
+            loc.setCity(getString("name", jObj));
+            loc.setCod(getString("cod", jObj));
+            loc.setDate(getInt("dt",jObj));
+            weather.location = loc;
 
 
-        JSONObject wObj = getObject("wind", jObj);
-        weather.wind.setSpeed(getFloat("speed", wObj));
-        weather.wind.setDeg(getFloat("deg", wObj));
+            JSONArray jArr = jObj.getJSONArray("weather");
+
+
+            JSONObject JSONWeather = jArr.getJSONObject(0);
+            weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
+            weather.currentCondition.setDescr(getString("description", JSONWeather));
+            weather.currentCondition.setCondition(getString("main", JSONWeather));
+            weather.currentCondition.setIcon(getString("icon", JSONWeather));
+
+            JSONObject mainObj = getObject("main", jObj);
+            weather.currentCondition.setHumidity(getInt("humidity", mainObj));
+            weather.currentCondition.setPressure(getInt("pressure", mainObj));
+            weather.temperature.setMaxTemp(getFloat("temp_max", mainObj));
+            weather.temperature.setMinTemp(getFloat("temp_min", mainObj));
+            weather.temperature.setTemp(getFloat("temp", mainObj));
+
+
+            JSONObject wObj = getObject("wind", jObj);
+            weather.wind.setSpeed(getFloat("speed", wObj));
+            weather.wind.setDeg(getFloat("deg", wObj));
+
+        } catch (JSONException e) {
+            try {
+                loc.setCod(getString("cod", jObj));
+                weather.location = loc;
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        }
 
         return weather;
     }

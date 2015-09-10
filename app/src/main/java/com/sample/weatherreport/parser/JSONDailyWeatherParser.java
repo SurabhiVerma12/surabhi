@@ -17,34 +17,44 @@ import java.util.List;
  */
 public class JSONDailyWeatherParser {
 
-    public static List<DailyForecast> getForecastWeather(String data) throws JSONException{
+    public static List<DailyForecast> getForecastWeather(String data){
         List<DailyForecast> daysForecast = new ArrayList<DailyForecast>();
-        JSONObject jObj = new JSONObject(data);
         LocationTracking loc = new LocationTracking();
-        JSONObject city = jObj.getJSONObject("city");
-        loc.setCountry(getString("country", city));
-        loc.setCity(getString("name", city));
-        JSONArray jArr = jObj.getJSONArray("list");
-        for (int i=1; i < jArr.length(); i++) {
+        JSONObject jObj = null;
+        try {
+            jObj = new JSONObject(data);
+            JSONObject city = jObj.getJSONObject("city");
+            loc.setCountry(getString("country", city));
+            loc.setCity(getString("name", city));
+            loc.setCod(getString("cod", jObj));
+            JSONArray jArr = jObj.getJSONArray("list");
+            for (int i=1; i < jArr.length(); i++) {
 
-            DailyForecast df = new DailyForecast();
-            df.weather.location = loc;
-            JSONObject jDayForecast = jArr.getJSONObject(i);
-            df.timestamp = jDayForecast.getLong("dt");
-            JSONObject jTempObj = jDayForecast.getJSONObject("temp");
-            df.forecastTemp.day = (float) jTempObj.getDouble("day");
-            df.forecastTemp.min = (float) jTempObj.getDouble("min");
-            df.forecastTemp.max = (float) jTempObj.getDouble("max");
-            df.weather.currentCondition.setPressure((float) jDayForecast.getDouble("pressure"));
-            df.weather.currentCondition.setHumidity((float) jDayForecast.getDouble("humidity"));
-            JSONArray jWeatherArr = jDayForecast.getJSONArray("weather");
-            JSONObject jWeatherObj = jWeatherArr.getJSONObject(0);
-            df.weather.currentCondition.setWeatherId(getInt("id", jWeatherObj));
-            df.weather.currentCondition.setDescr(getString("description", jWeatherObj));
-            df.weather.currentCondition.setCondition(getString("main", jWeatherObj));
-            df.weather.currentCondition.setIcon(getString("icon", jWeatherObj));
-            daysForecast.add(df);
-
+                DailyForecast df = new DailyForecast();
+                df.weather.location = loc;
+                JSONObject jDayForecast = jArr.getJSONObject(i);
+                df.timestamp = jDayForecast.getLong("dt");
+                JSONObject jTempObj = jDayForecast.getJSONObject("temp");
+                df.forecastTemp.day = (float) jTempObj.getDouble("day");
+                df.forecastTemp.min = (float) jTempObj.getDouble("min");
+                df.forecastTemp.max = (float) jTempObj.getDouble("max");
+                df.weather.currentCondition.setPressure((float) jDayForecast.getDouble("pressure"));
+                df.weather.currentCondition.setHumidity((float) jDayForecast.getDouble("humidity"));
+                JSONArray jWeatherArr = jDayForecast.getJSONArray("weather");
+                JSONObject jWeatherObj = jWeatherArr.getJSONObject(0);
+                df.weather.currentCondition.setWeatherId(getInt("id", jWeatherObj));
+                df.weather.currentCondition.setDescr(getString("description", jWeatherObj));
+                df.weather.currentCondition.setCondition(getString("main", jWeatherObj));
+                df.weather.currentCondition.setIcon(getString("icon", jWeatherObj));
+                daysForecast.add(df);
+            }
+        } catch (JSONException e) {
+            try {
+                loc.setCod(getString("cod", jObj));
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
         }
 
         return daysForecast;

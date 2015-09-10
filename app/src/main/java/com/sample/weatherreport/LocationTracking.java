@@ -12,6 +12,7 @@ public class LocationTracking {
     private long date;
     private String country;
     private String city;
+    private String cod;
 
     public float getLongitude() {
         return longitude;
@@ -67,6 +68,14 @@ public class LocationTracking {
     public void setCity(String city)
     {
         this.city = city;
+    }
+    public String getCod()
+    {
+        return cod;
+    }
+    public void setCod(String cod)
+    {
+        this.cod = cod;
     }
 
 }

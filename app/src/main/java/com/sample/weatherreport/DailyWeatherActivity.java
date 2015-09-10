@@ -13,13 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sample.weatherreport.adapter.WeatherAdapter;
 import com.sample.weatherreport.parser.FetchWeather;
 import com.sample.weatherreport.parser.JSONDailyWeatherParser;
-
-import org.json.JSONException;
-
 import java.util.List;
 
 public class DailyWeatherActivity extends Fragment {
@@ -34,7 +30,6 @@ public class DailyWeatherActivity extends Fragment {
 
     public DailyWeatherActivity()
     {
-
         handler = new Handler();
     }
 
@@ -46,7 +41,11 @@ public class DailyWeatherActivity extends Fragment {
         current_city=(TextView)rootView.findViewById(R.id.current_city);
         current_temp=(TextView)rootView.findViewById(R.id.current_temp);
         current_icon=(ImageView)rootView.findViewById(R.id.current_icon);
-        dialog = ProgressDialog.show(getActivity(), "", "Please wait..Loading your weather Details", true);
+        dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
+        dialog.setTitle("WEATHER DETAILS");
+        dialog.setMessage("Please wait ...Weather Details are being loaded.");
+        dialog.setCancelable(false);
+        dialog.show();
 
         return rootView;
     }
@@ -65,11 +64,10 @@ public class DailyWeatherActivity extends Fragment {
                 if(json == null){
                     handler.post(new Runnable(){
                         public void run(){
-                            Toast.makeText(getActivity(),
-                                    getActivity().getString(R.string.place_not_found),
-                                    Toast.LENGTH_LONG).show();
                             dialog.dismiss();
-                            getActivity().finish();
+                            if(((TabHostActivity)getActivity()).isNetworkAvailable()==false){
+                                ((TabHostActivity)getActivity()).showNetworkAlert();
+                            }
                         }
                     });
                 } else {
@@ -87,12 +85,19 @@ public class DailyWeatherActivity extends Fragment {
 
         try {
             List<DailyForecast> WeaFore  = JSONDailyWeatherParser.getForecastWeather(json);
-            myList.setAdapter(new WeatherAdapter(getActivity(), WeaFore));
-            current_city.setText(WeaFore.get(0).weather.location.getCity());
-            current_temp.setText(new PlacePreference(getActivity()).getTemp()+" ℃");
-            ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL + new PlacePreference(getActivity()).getIcon().concat(".png"));
-            dialog.dismiss();
-        } catch (JSONException e) {
+            if(!(WeaFore.get(0).weather.location.getCod().equalsIgnoreCase("200"))){
+                dialog.dismiss();
+                Toast.makeText(getActivity(),"no data found for this city",Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }else{
+                myList.setAdapter(new WeatherAdapter(getActivity(), WeaFore));
+                current_city.setText(WeaFore.get(0).weather.location.getCity());
+                current_temp.setText(new PlacePreference(getActivity()).getTemp()+" ℃");
+                ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL + new PlacePreference(getActivity()).getIcon().concat(".png"));
+                dialog.dismiss();
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         };
 

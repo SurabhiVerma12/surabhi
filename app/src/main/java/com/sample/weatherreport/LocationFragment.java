@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,32 +11,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ListView;
-
 import com.sample.weatherreport.adapter.GooglePlacesAutocompleteAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class LocationFragment extends Fragment implements AdapterView.OnItemClickListener{
     LocationValueListener mCallback;
     AutoCompleteTextView autoCompView;
-    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
-    private static final String OUT_JSON = "/json";
-    private static final String API_KEY1= "AIzaSyDuD2zWnoTtr7YetUOGgC0Rybjd4O08nEk";
     public interface LocationValueListener{
         public void passData(String data);
     }
@@ -70,6 +50,13 @@ public class LocationFragment extends Fragment implements AdapterView.OnItemClic
                 mCallback.passData(cityName);
             }
         });
+        if(getActivity().getIntent().getStringExtra("str")!=null &&  new PlacePreference(getActivity()).getfirstValue()) {
+            String city=getActivity().getIntent().getStringExtra("str").toString();
+            strArr.add(city);
+            adapter.notifyDataSetChanged();
+            new PlacePreference(getActivity()).setFirstValue(false);
+        }
+
         return rootView;
     }
 
@@ -90,17 +77,24 @@ public class LocationFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
-        String str = (String) adapterView.getItemAtPosition(position);
-        String segments[] = str.split(",");
-        String cityName=segments[0];
-        if(strArr.contains(str)){
+        if(((TabHostActivity)getActivity()).isNetworkAvailable()==false)
+        {
+            ((TabHostActivity)getActivity()).showNetworkAlert();
+        }
+        else{
+            String str = (String) adapterView.getItemAtPosition(position);
+            String segments[] = str.split(",");
+            String cityName=segments[0];
+            if(strArr.contains(str)){
 
-        }else
-            strArr.add(str);
-        adapter.notifyDataSetChanged();
-        autoCompView.setText("");
-        hideSoftkeyboard();
-        mCallback.passData(cityName);
+            }else
+                strArr.add(str);
+            adapter.notifyDataSetChanged();
+            autoCompView.setText("");
+            hideSoftkeyboard();
+            mCallback.passData(cityName);
+        }
+
     }
 
     public void hideSoftkeyboard()

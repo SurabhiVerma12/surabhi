@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <permission
+        android:name="com.example.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
 
     <application
         android:allowBackup="true"
@@ -27,6 +31,8 @@
             android:windowSoftInputMode="stateHidden"
             >
         </activity>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDm8d9Q8ZGl9Cyqb07fLtgU7sP3mKIhdCQ"/>
+
 
     </application>
 

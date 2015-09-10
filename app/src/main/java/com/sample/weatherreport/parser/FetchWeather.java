@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by surabhiv on 9/1/2015.
@@ -21,7 +22,7 @@ public class FetchWeather {
     public static String getJSON (Context context , String place,String url1){
         URL url = null;
         try {
-            url = new URL(String.format(url1, place));
+            url = new URL(String.format(url1,URLEncoder.encode(place, "utf8")));
             HttpURLConnection connection =
                     (HttpURLConnection)url.openConnection();
             BufferedReader reader = new BufferedReader(

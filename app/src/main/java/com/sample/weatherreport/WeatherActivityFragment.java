@@ -28,6 +28,9 @@ public class WeatherActivityFragment extends Fragment {
     TextView humidity_value;
     TextView pressure_value;
     TextView wind_value;
+    TextView humidity_value_text;
+    TextView pressure_value_text;
+    TextView wind_value_text;
     TextView updatedField;
     Handler handler;
     private static String IMG_URL = "http://openweathermap.org/img/w/";
@@ -48,12 +51,17 @@ public class WeatherActivityFragment extends Fragment {
         humidity_value = (TextView)rootView.findViewById(R.id.humid_field);
         pressure_value = (TextView)rootView.findViewById(R.id.pressure_field);
         wind_value = (TextView)rootView.findViewById(R.id.wind_field);
+        humidity_value_text = (TextView)rootView.findViewById(R.id.humid_field_text);
+        pressure_value_text = (TextView)rootView.findViewById(R.id.pressure_field_text);
+        wind_value_text = (TextView)rootView.findViewById(R.id.wind_field_text);
         currentTemperature = (TextView)rootView.findViewById(R.id.current_temperature_field);
+        textViewNONVisibility();
         weatherIcon=(ImageView)rootView.findViewById(R.id.weather_icon);
         updatedField =(TextView)rootView.findViewById(R.id.updated_field);
         dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
         dialog.setTitle("WEATHER DETAILS");
         dialog.setMessage("Please wait ...Weather Details are being loaded.");
+        dialog.setCancelable(false);
         dialog.show();
         return rootView;
     }
@@ -69,14 +77,15 @@ public class WeatherActivityFragment extends Fragment {
             public void run(){
                 final String json = FetchWeather.getJSON(getActivity(), city, OPEN_WEATHER_MAP_API);
                 Log.d("json value   ",json+"" );
-                if(json == null){
+                if(json == null ){
                     handler.post(new Runnable(){
                         public void run(){
-                            Toast.makeText(getActivity(),
-                                    getActivity().getString(R.string.place_not_found),
-                                    Toast.LENGTH_LONG).show();
                             dialog.dismiss();
-                            getActivity().finish();
+                            if(((TabHostActivity)getActivity()).isNetworkAvailable()==false){
+
+                                ((TabHostActivity)getActivity()).showNetworkAlert();
+                            }
+
                         }
                     });
                 } else {
@@ -95,25 +104,47 @@ public class WeatherActivityFragment extends Fragment {
         Weather weather = new Weather();
         try {
             weather = JSONWeatherParser.getWeather(json);
-            String url = IMG_URL+weather.currentCondition.getIcon().concat(".png");
-            ((TabHostActivity)getActivity()).new DownloadImageTask(weatherIcon).execute(url);
-            cityName.setText(weather.location.getCity() + "," + weather.location.getCountry());
-            detailed_value.setText(
-                    (weather.currentCondition.getCondition()).toUpperCase() + "(" + weather.currentCondition.getDescr() + ")");
-            humidity_value.setText( weather.currentCondition.getHumidity() + "%");
-            pressure_value.setText(weather.currentCondition.getPressure() + " hPa");
-            wind_value.setText(weather.wind.getSpeed()+ "mps");
-            currentTemperature.setText(String.format("%.2f", weather.temperature.getTemp())+ " ℃");
-            new PlacePreference(getActivity()).setTemp(weather.temperature.getTemp() + "");
-            new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon()+"");
-            DateFormat df = DateFormat.getDateTimeInstance();
-            String updatedOn = df.format(new Date(weather.location.getDate()*1000));
-            updatedField.setText("Last update: " + updatedOn);
-            dialog.dismiss();
+            if(!(weather.location.getCod().equalsIgnoreCase("200"))){
+                dialog.dismiss();
+                Toast.makeText(getActivity(),"no data found for this city",Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }else{
+                String url = IMG_URL+weather.currentCondition.getIcon().concat(".png");
+                ((TabHostActivity)getActivity()).new DownloadImageTask(weatherIcon).execute(url);
+                cityName.setText(weather.location.getCity() + "," + weather.location.getCountry());
+                textViewVisibility();
+                detailed_value.setText(
+                        (weather.currentCondition.getCondition()).toUpperCase() + "(" + weather.currentCondition.getDescr() + ")");
+                humidity_value.setText( weather.currentCondition.getHumidity() + "%");
+                pressure_value.setText(weather.currentCondition.getPressure() + " hPa");
+                wind_value.setText(weather.wind.getSpeed()+ "mps");
+                currentTemperature.setText(String.format("%.2f", weather.temperature.getTemp())+ " ℃");
+                new PlacePreference(getActivity()).setTemp(weather.temperature.getTemp() + "");
+                new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon()+"");
+                DateFormat df = DateFormat.getDateTimeInstance();
+                String updatedOn = df.format(new Date(weather.location.getDate()*1000));
+                updatedField.setText("Last update: " + updatedOn);
+                dialog.dismiss();
+            }
 
-        } catch (JSONException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void textViewNONVisibility(){
+        wind_value_text.setVisibility(View.INVISIBLE);
+        humidity_value_text.setVisibility(View.INVISIBLE);
+        pressure_value_text.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void textViewVisibility(){
+        wind_value_text.setVisibility(View.VISIBLE);
+        humidity_value_text.setVisibility(View.VISIBLE);
+        pressure_value_text.setVisibility(View.VISIBLE);
+
     }
 
 }
