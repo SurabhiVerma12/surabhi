@@ -21,18 +21,16 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import com.sample.weatherreport.adapter.GooglePlacesAutocompleteAdapter;
 
 public class SelectCityActivity extends Activity implements AdapterView.OnItemClickListener ,LocationListener {
-    Button button;
+    Button mButton;
     AutoCompleteTextView autoCompView;
     GPSLocation gps;
-    private Context context=null;
-    private ProgressDialog dialog = null;
+    private ProgressDialog mDialog = null;
     double latitude;
     double longitude;
 
@@ -45,24 +43,21 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
             autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
             autoCompView.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
             autoCompView.setOnItemClickListener(this);
-            button = (Button) findViewById(R.id.submit);
-            button.setOnClickListener(new View.OnClickListener() {
+            mButton = (Button) findViewById(R.id.submit);
+            mButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(isNetworkAvailable()==false){
+                    if (isNetworkAvailable() == false) {
                         showSettingsAlert();
-                    }
-                    else{
+                    } else {
                         gps = new GPSLocation(SelectCityActivity.this);
                         if (gps.canGetLocation()) {
                             latitude = gps.getLatitude();
                             longitude = gps.getLongitude();
-                            Log.d("latitude sur " ,latitude +" "+longitude);
-                            if(latitude==0.0 || longitude==0.0){
-                                Toast.makeText(SelectCityActivity.this,"Please wait till GPS gets your location",Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                dialog = ProgressDialog.show(SelectCityActivity.this, "", "Please wait..", true);
+                            if (latitude == 0.0 || longitude == 0.0) {
+                                Toast.makeText(SelectCityActivity.this, getString(R.string.gps_location), Toast.LENGTH_LONG).show();
+                            } else {
+                                mDialog = ProgressDialog.show(SelectCityActivity.this, "", getString(R.string.please_wait), true);
                                 GetCurrentAddress currentadd = new GetCurrentAddress();
                                 currentadd.execute();
                                 new PlacePreference(SelectCityActivity.this).setFirstRun(true);
@@ -155,7 +150,7 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
 
         @Override
         protected void onPostExecute(String resultString) {
-            dialog.dismiss();
+            mDialog.dismiss();
             hideSoftkeyboard();
             Intent intent = new Intent(SelectCityActivity.this, TabHostActivity.class);
             intent.putExtra("cityName", address);
@@ -182,12 +177,12 @@ public class SelectCityActivity extends Activity implements AdapterView.OnItemCl
 
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Network Connectivity Problem");
-        alertDialog.setMessage("Unable to connect to server , Please check your network connectivity");
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialog.setTitle(getString(R.string.network_connectivity));
+        alertDialog.setMessage(getString(R.string.server_error));
+        alertDialog.setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                new PlacePreference(SelectCityActivity.this).setFirstRun(false);
                 dialog.cancel();
+                finish();
             }
         });
 

@@ -42,10 +42,9 @@ public class WeatherAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        // create a ViewHolder reference
+
         ViewHolder holder;
 
-        //check to see if the reused view is null or not, if is not null then reuse it
         if (view == null) {
             holder = new ViewHolder();
 

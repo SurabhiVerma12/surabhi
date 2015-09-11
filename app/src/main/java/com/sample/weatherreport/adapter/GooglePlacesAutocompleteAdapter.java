@@ -103,8 +103,6 @@ public class GooglePlacesAutocompleteAdapter extends ArrayAdapter implements Fil
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
             resultList = new ArrayList(predsJsonArray.length());
             for (int i = 0; i < predsJsonArray.length(); i++) {
-                System.out.println(predsJsonArray.getJSONObject(i).getString("description"));
-                System.out.println("============================================================");
                 resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
             }
         } catch (JSONException e) {

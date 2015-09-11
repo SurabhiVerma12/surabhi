@@ -19,11 +19,11 @@ import com.sample.weatherreport.parser.JSONDailyWeatherParser;
 import java.util.List;
 
 public class DailyWeatherActivity extends Fragment {
-    Handler handler;
+    private Handler handler;
     private ListView myList;
     private TextView current_city;
     private TextView current_temp;
-    ImageView current_icon;
+    private ImageView current_icon;
     private static String OPEN_WEATHER_MAP_DAILY_API = "http://api.openweathermap.org/data/2.5/forecast/daily?q=%s&mode=json&units=metric&cnt=7";
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private ProgressDialog dialog = null;
@@ -42,8 +42,8 @@ public class DailyWeatherActivity extends Fragment {
         current_temp=(TextView)rootView.findViewById(R.id.current_temp);
         current_icon=(ImageView)rootView.findViewById(R.id.current_icon);
         dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
-        dialog.setTitle("WEATHER DETAILS");
-        dialog.setMessage("Please wait ...Weather Details are being loaded.");
+        dialog.setTitle(getString(R.string.weather_details));
+        dialog.setMessage(getString(R.string.weather_loading));
         dialog.setCancelable(false);
         dialog.show();
 
@@ -87,7 +87,7 @@ public class DailyWeatherActivity extends Fragment {
             List<DailyForecast> WeaFore  = JSONDailyWeatherParser.getForecastWeather(json);
             if(!(WeaFore.get(0).weather.location.getCod().equalsIgnoreCase("200"))){
                 dialog.dismiss();
-                Toast.makeText(getActivity(),"no data found for this city",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.data_not_found),Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }else{
                 myList.setAdapter(new WeatherAdapter(getActivity(), WeaFore));

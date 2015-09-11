@@ -19,5 +19,18 @@
     <string name="field_blank">Field cannot be left blank</string>
     <string name="title_activity_daily_weather">DailyWeatherActivity</string>
     <string name="daily_weather">Weather Report</string>
+    <string name="network_connectivity">Network Connectivity Problem</string>
+    <string name="server_error">Unable to connect to server , Please check your network connectivity</string>
+    <string name="OK">OK</string>
+    <string name="gps_location">Please wait till GPS gets your location</string>
+    <string name="please_wait">Please wait..</string>
+    <string name="weather_details">WEATHER DETAILS</string>
+    <string name="weather_loading">Please wait ...Weather Details are being loaded.</string>
+    <string name="data_not_found">No data found for this city</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="gps_settings">GPS SETTINGS</string>
+    <string name="enable_gps">GPS is not enabled. Do you want to go to settings menu?</string>
+
 
 </resources>

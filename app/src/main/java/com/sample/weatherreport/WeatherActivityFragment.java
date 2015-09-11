@@ -10,12 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.sample.weatherreport.parser.FetchWeather;
 import com.sample.weatherreport.parser.JSONWeatherParser;
-
-import org.json.JSONException;
-
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -38,7 +34,6 @@ public class WeatherActivityFragment extends Fragment {
     private ProgressDialog dialog = null;
 
     public WeatherActivityFragment(){
-
         handler = new Handler();
     }
 
@@ -59,8 +54,8 @@ public class WeatherActivityFragment extends Fragment {
         weatherIcon=(ImageView)rootView.findViewById(R.id.weather_icon);
         updatedField =(TextView)rootView.findViewById(R.id.updated_field);
         dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
-        dialog.setTitle("WEATHER DETAILS");
-        dialog.setMessage("Please wait ...Weather Details are being loaded.");
+        dialog.setTitle(getString(R.string.weather_details));
+        dialog.setMessage(getString(R.string.weather_loading));
         dialog.setCancelable(false);
         dialog.show();
         return rootView;
@@ -75,14 +70,14 @@ public class WeatherActivityFragment extends Fragment {
     private void showWeatherDetails(final String city){
         new Thread(){
             public void run(){
-                final String json = FetchWeather.getJSON(getActivity(), city, OPEN_WEATHER_MAP_API);
+                final String json =
+                        FetchWeather.getJSON(getActivity(), city, OPEN_WEATHER_MAP_API);
                 Log.d("json value   ",json+"" );
                 if(json == null ){
                     handler.post(new Runnable(){
                         public void run(){
                             dialog.dismiss();
                             if(((TabHostActivity)getActivity()).isNetworkAvailable()==false){
-
                                 ((TabHostActivity)getActivity()).showNetworkAlert();
                             }
 
@@ -101,12 +96,12 @@ public class WeatherActivityFragment extends Fragment {
 
     private void updateWeatherValues(String json){
 
-        Weather weather = new Weather();
+        Weather weather;
         try {
             weather = JSONWeatherParser.getWeather(json);
             if(!(weather.location.getCod().equalsIgnoreCase("200"))){
                 dialog.dismiss();
-                Toast.makeText(getActivity(),"no data found for this city",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),getString(R.string.data_not_found),Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }else{
                 String url = IMG_URL+weather.currentCondition.getIcon().concat(".png");

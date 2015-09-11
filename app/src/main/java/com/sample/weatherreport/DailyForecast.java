@@ -8,7 +8,6 @@ import java.util.Date;
  */
 public class DailyForecast {
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     public Weather weather = new Weather();
     public TempratureForecast forecastTemp = new TempratureForecast();
     public long timestamp;
@@ -20,7 +19,5 @@ public class DailyForecast {
 
     }
 
-    public String getStringDate() {
-        return sdf.format(new Date(timestamp));
-    }
+
 }

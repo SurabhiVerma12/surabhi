@@ -50,7 +50,9 @@ public class JSONDailyWeatherParser {
             }
         } catch (JSONException e) {
             try {
+                DailyForecast df = new DailyForecast();
                 loc.setCod(getString("cod", jObj));
+                df.weather.location = loc;
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }

@@ -22,8 +22,8 @@ public class GPSLocation implements LocationListener {
     Location location;
     double latitude;
     double longitude;
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     protected LocationManager locationManager;
     public GPSLocation(Context context) {
         this.mContext = context;
@@ -37,7 +37,7 @@ public class GPSLocation implements LocationListener {
             isNetworkEnabled = locationManager
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
+
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -45,7 +45,6 @@ public class GPSLocation implements LocationListener {
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    Log.d("Network", "Network");
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
@@ -60,7 +59,6 @@ public class GPSLocation implements LocationListener {
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("GPS Enabled", "GPS Enabled");
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
@@ -97,15 +95,15 @@ public class GPSLocation implements LocationListener {
 
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-        alertDialog.setTitle("GPS is settings");
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+        alertDialog.setTitle(R.string.gps_settings);
+        alertDialog.setMessage(R.string.enable_gps);
+        alertDialog.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
         });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
