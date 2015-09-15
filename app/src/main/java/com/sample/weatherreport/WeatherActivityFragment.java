@@ -32,6 +32,7 @@ public class WeatherActivityFragment extends Fragment {
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
     private ProgressDialog dialog = null;
+    private TabHostActivity.TCImageLoader tcImageLoader = null;
 
     public WeatherActivityFragment(){
         handler = new Handler();
@@ -105,7 +106,10 @@ public class WeatherActivityFragment extends Fragment {
                 getActivity().finish();
             }else{
                 String url = IMG_URL+weather.currentCondition.getIcon().concat(".png");
-                ((TabHostActivity)getActivity()).new DownloadImageTask(weatherIcon).execute(url);
+                if (tcImageLoader==null){
+                    tcImageLoader =  ((TabHostActivity) getActivity()).new TCImageLoader(getActivity());
+                }
+                tcImageLoader.display(url, weatherIcon);
                 cityName.setText(weather.location.getCity() + "," + weather.location.getCountry());
                 textViewVisibility();
                 detailed_value.setText(

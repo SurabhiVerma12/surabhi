@@ -27,6 +27,7 @@ public class DailyWeatherActivity extends Fragment {
     private static String OPEN_WEATHER_MAP_DAILY_API = "http://api.openweathermap.org/data/2.5/forecast/daily?q=%s&mode=json&units=metric&cnt=7";
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private ProgressDialog dialog = null;
+    private TabHostActivity.TCImageLoader tcImageLoader = null;
 
     public DailyWeatherActivity()
     {
@@ -90,10 +91,14 @@ public class DailyWeatherActivity extends Fragment {
                 Toast.makeText(getActivity(),getString(R.string.data_not_found),Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }else{
+                String image_url =IMG_URL + new PlacePreference(getActivity()).getIcon().concat(".png");
                 myList.setAdapter(new WeatherAdapter(getActivity(), WeaFore));
                 current_city.setText(WeaFore.get(0).weather.location.getCity());
                 current_temp.setText(new PlacePreference(getActivity()).getTemp()+" ℃");
-                ((TabHostActivity)getActivity()).new DownloadImageTask(current_icon).execute(IMG_URL + new PlacePreference(getActivity()).getIcon().concat(".png"));
+                if (tcImageLoader==null){
+                    tcImageLoader =  ((TabHostActivity) getActivity()).new TCImageLoader(getActivity());
+                }
+                tcImageLoader.display(image_url, current_icon);
                 dialog.dismiss();
             }
 
