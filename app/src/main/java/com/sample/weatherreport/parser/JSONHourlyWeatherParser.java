@@ -1,8 +1,7 @@
 package com.sample.weatherreport.parser;
 
-import android.util.Log;
-
 import com.sample.weatherreport.DailyForecast;
+import com.sample.weatherreport.HourlyForecast;
 import com.sample.weatherreport.LocationTracking;
 
 import org.json.JSONArray;
@@ -13,45 +12,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by surabhiv on 9/3/2015.
+ * Created by surabhiv on 9/16/2015.
  */
-public class JSONDailyWeatherParser {
+public class JSONHourlyWeatherParser {
 
-    public static List<DailyForecast> getForecastWeather(String data){
-        List<DailyForecast> daysForecast = new ArrayList<DailyForecast>();
+    public static List<HourlyForecast> getForecastWeather(String data){
+        List<HourlyForecast> hourForecast = new ArrayList<HourlyForecast>();
         LocationTracking loc = new LocationTracking();
         JSONObject jObj = null;
+        JSONObject city=null;
         try {
             jObj = new JSONObject(data);
-            JSONObject city = jObj.getJSONObject("city");
-            loc.setCountry(getString("country", city));
-            loc.setCity(getString("name", city));
-            loc.setCod(getString("cod", jObj));
+            city = jObj.getJSONObject("city");
+            //loc.setCod(getString("cod", city));
             JSONArray jArr = jObj.getJSONArray("list");
             for (int i=0; i < jArr.length(); i++) {
-
-                DailyForecast df = new DailyForecast();
-                df.weather.location = loc;
-                JSONObject jDayForecast = jArr.getJSONObject(i);
-                df.timestamp = jDayForecast.getLong("dt");
-                JSONObject jTempObj = jDayForecast.getJSONObject("temp");
-                df.forecastTemp.day = (float) jTempObj.getDouble("day");
-                df.forecastTemp.min = (float) jTempObj.getDouble("min");
-                df.forecastTemp.max = (float) jTempObj.getDouble("max");
-                df.weather.currentCondition.setPressure((float) jDayForecast.getDouble("pressure"));
-                df.weather.currentCondition.setHumidity((float) jDayForecast.getDouble("humidity"));
-                JSONArray jWeatherArr = jDayForecast.getJSONArray("weather");
+                HourlyForecast df = new HourlyForecast();
+                //df.weather.location = loc;
+                JSONObject jHourForecast = jArr.getJSONObject(i);
+                JSONObject mainObj = jHourForecast.getJSONObject("main");
+                df.weather.currentCondition.setPressure((float) mainObj.getDouble("pressure"));
+                df.weather.currentCondition.setHumidity((float) mainObj.getDouble("humidity"));
+                df.weather.temperature.setTemp((float) mainObj.getDouble("temp"));
+                JSONArray jWeatherArr = jHourForecast.getJSONArray("weather");
                 JSONObject jWeatherObj = jWeatherArr.getJSONObject(0);
                 df.weather.currentCondition.setWeatherId(getInt("id", jWeatherObj));
                 df.weather.currentCondition.setDescr(getString("description", jWeatherObj));
                 df.weather.currentCondition.setCondition(getString("main", jWeatherObj));
                 df.weather.currentCondition.setIcon(getString("icon", jWeatherObj));
-                daysForecast.add(df);
+                df.forecastTemp.dTime = getString("dt_txt", jHourForecast);
+                hourForecast.add(df);
             }
         } catch (JSONException e) {
             try {
-                DailyForecast df = new DailyForecast();
-                loc.setCod(getString("cod", jObj));
+                HourlyForecast df = new HourlyForecast();
+                loc.setCod(getString("cod", city));
                 df.weather.location = loc;
             } catch (JSONException e1) {
                 e1.printStackTrace();
@@ -59,7 +54,7 @@ public class JSONDailyWeatherParser {
             e.printStackTrace();
         }
 
-        return daysForecast;
+        return hourForecast;
     }
 
     private static String getString(String tagName, JSONObject jObj) throws JSONException {
@@ -75,4 +70,3 @@ public class JSONDailyWeatherParser {
     }
 
 }
-

@@ -3,12 +3,14 @@ package com.sample.weatherreport;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +18,10 @@ import android.widget.Toast;
 import com.sample.weatherreport.adapter.WeatherAdapter;
 import com.sample.weatherreport.parser.FetchWeather;
 import com.sample.weatherreport.parser.JSONDailyWeatherParser;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DailyWeatherActivity extends Fragment {
@@ -28,6 +34,7 @@ public class DailyWeatherActivity extends Fragment {
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private ProgressDialog dialog = null;
     private TabHostActivity.TCImageLoader tcImageLoader = null;
+    List<DailyForecast> WeaFore;
 
     public DailyWeatherActivity()
     {
@@ -83,9 +90,8 @@ public class DailyWeatherActivity extends Fragment {
     }
 
     private void updateDailyForecast(String json) {
-
         try {
-            List<DailyForecast> WeaFore  = JSONDailyWeatherParser.getForecastWeather(json);
+            WeaFore  = JSONDailyWeatherParser.getForecastWeather(json);
             if(!(WeaFore.get(0).weather.location.getCod().equalsIgnoreCase("200"))){
                 dialog.dismiss();
                 Toast.makeText(getActivity(),getString(R.string.data_not_found),Toast.LENGTH_LONG).show();
@@ -100,6 +106,23 @@ public class DailyWeatherActivity extends Fragment {
                 }
                 tcImageLoader.display(image_url, current_icon);
                 dialog.dismiss();
+                myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        if(position > 4){
+                            Toast.makeText(getActivity(),getActivity().getString(R.string.data_not_available),Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent intent =new Intent(getActivity(),HourlyWeatherInformation.class);
+                            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            String updatedOn = df.format(new Date(WeaFore.get(position).timestamp * 1000));
+                            intent.putExtra("date",updatedOn);
+                            intent.putExtra("city",new PlacePreference(getActivity()).getCity());
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
 
         } catch (Exception e) {

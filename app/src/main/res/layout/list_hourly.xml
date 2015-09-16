@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/list_item"
+    android:background="#FFFFFF"
+    android:gravity="center_vertical">
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_time"
+        style="@style/MyListTheme"
+        android:padding="10dp"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_clouds_hourly"
+        style="@style/MyListTheme"
+        android:padding="10dp"
+        android:layout_toRightOf="@+id/text_time"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_temp_hourly"
+        style="@style/MyListTheme"
+        android:padding="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="5dp"/>
+
+</RelativeLayout>

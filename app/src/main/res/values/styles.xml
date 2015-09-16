@@ -45,4 +45,20 @@
         <item name="android:background">#B0E0E6</item>
     </style>
 
+    <style name="UserDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="CustomTheme" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:alertDialogTheme">@style/CustomDialogTheme</item>
+        <item name="android:dialogTheme">@style/CustomDialogTheme</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:background">#9933CC</item>
+        <item name="android:textColor">#FAF5F7</item>
+    </style>
+
 </resources>

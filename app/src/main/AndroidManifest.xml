@@ -18,6 +18,7 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".SelectCityActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/daily_weather"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -27,7 +28,17 @@
         </activity>
         <activity
             android:name=".TabHostActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/daily_weather"
+            android:windowSoftInputMode="stateHidden"
+            >
+        </activity>
+        <activity
+            android:name=".HourlyWeatherInformation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/CustomTheme"
+            android:label="@string/daily_weather"
+            android:excludeFromRecents="true"
             android:windowSoftInputMode="stateHidden"
             >
         </activity>
