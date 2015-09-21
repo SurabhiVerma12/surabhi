@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,10 +16,16 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
+
+import com.sample.weatherreport.adapter.TabPagerAdapter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -26,36 +33,67 @@ import java.net.URL;
 
 public class TabHostActivity extends FragmentActivity implements LocationFragment.LocationValueListener{
     private ActionBar actionBar;
-    ActionBar.Tab Tab1, Tab2,Tab3;
-    Fragment fragmentTab1 = new LocationFragment();
-    Fragment fragmentTab2 = new WeatherActivityFragment();
-    Fragment fragmentTab3 = new DailyWeatherActivity();
-
+    ActionBar.Tab Tab1, Tab2,Tab3,Tab4;
+    ViewPager Tab;
+    TabPagerAdapter TabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_host);
+        TabAdapter = new TabPagerAdapter(getSupportFragmentManager());
+
+        Tab = (ViewPager)findViewById(R.id.pager);
+        Tab.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        actionBar = getActionBar();
+                        actionBar.setSelectedNavigationItem(position);
+                    }
+                });
+        Tab.setAdapter(TabAdapter);
         actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.TabListener tabListener = new ActionBar.TabListener(){
+
+            @Override
+            public void onTabReselected(android.app.ActionBar.Tab tab,
+                                        FragmentTransaction ft) {
+
+            }
+
+            @Override
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+                Tab.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(android.app.ActionBar.Tab tab,
+                                        FragmentTransaction ft) {
+
+
+            }};
         Tab1 = actionBar.newTab().setText("LOCATION");
         Tab2 = actionBar.newTab().setText("NOW");
         Tab3 = actionBar.newTab().setText("DAILY");
+        Tab4 = actionBar.newTab().setText("MAP");
 
-        Tab1.setTabListener(new TabListener(fragmentTab1));
-        Tab2.setTabListener(new TabListener(fragmentTab2));
-        Tab3.setTabListener(new TabListener(fragmentTab3));
+        Tab1.setTabListener(tabListener);
+        Tab2.setTabListener(tabListener);
+        Tab3.setTabListener(tabListener);
+        Tab4.setTabListener(tabListener);
 
         actionBar.addTab(Tab1);
         actionBar.addTab(Tab2);
         actionBar.addTab(Tab3);
-
+        actionBar.addTab(Tab4);
 
         if(getIntent().getStringExtra("cityName")!=null){
-           passData(getIntent().getStringExtra("cityName"));
+            passData(getIntent().getStringExtra("cityName"));
         }
-
         this.setTitle(getString(R.string.daily_weather));
     }
 
@@ -93,7 +131,7 @@ public class TabHostActivity extends FragmentActivity implements LocationFragmen
             ActivityManager am = (ActivityManager) context.getSystemService(
                     Context.ACTIVITY_SERVICE);
             int maxKb = am.getMemoryClass() * 1024;
-            int limitKb = maxKb / 8; // 1/8th of total ram
+            int limitKb = maxKb / 8;
             cache = new TCLruCache(limitKb);
         }
 

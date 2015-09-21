@@ -1,8 +1,9 @@
 package com.sample.weatherreport;
 import android.app.ProgressDialog;
 import android.os.Handler;
-import android.app.Fragment;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,18 +55,27 @@ public class WeatherActivityFragment extends Fragment {
         textViewNONVisibility();
         weatherIcon=(ImageView)rootView.findViewById(R.id.weather_icon);
         updatedField =(TextView)rootView.findViewById(R.id.updated_field);
-        dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
-        dialog.setTitle(getString(R.string.weather_details));
-        dialog.setMessage(getString(R.string.weather_loading));
-        dialog.setCancelable(false);
-        dialog.show();
         return rootView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showWeatherDetails(new PlacePreference(getActivity()).getCity());
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
+            dialog.setTitle(getString(R.string.weather_details));
+            dialog.setMessage(getString(R.string.weather_loading));
+            dialog.setCancelable(false);
+            dialog.show();
+            showWeatherDetails(new PlacePreference(getActivity()).getCity());
+        }
+
     }
 
     private void showWeatherDetails(final String city){
@@ -80,8 +90,10 @@ public class WeatherActivityFragment extends Fragment {
                             dialog.dismiss();
                             if(((TabHostActivity)getActivity()).isNetworkAvailable()==false){
                                 ((TabHostActivity)getActivity()).showNetworkAlert();
+                            }else {
+                                Toast.makeText(getActivity(),"Not Able to Fetch the weather information",Toast.LENGTH_LONG).show();
+                                getActivity().finish();
                             }
-
                         }
                     });
                 } else {
@@ -96,12 +108,11 @@ public class WeatherActivityFragment extends Fragment {
     }
 
     private void updateWeatherValues(String json){
-
+        dialog.dismiss();
         Weather weather;
         try {
             weather = JSONWeatherParser.getWeather(json);
             if(!(weather.location.getCod().equalsIgnoreCase("200"))){
-                dialog.dismiss();
                 Toast.makeText(getActivity(),getString(R.string.data_not_found),Toast.LENGTH_LONG).show();
                 getActivity().finish();
             }else{
@@ -123,7 +134,6 @@ public class WeatherActivityFragment extends Fragment {
                 DateFormat df = DateFormat.getDateTimeInstance();
                 String updatedOn = df.format(new Date(weather.location.getDate()*1000));
                 updatedField.setText("Last update: " + updatedOn);
-                dialog.dismiss();
             }
 
 

@@ -1,11 +1,12 @@
 package com.sample.weatherreport;
 
 
-import android.app.Fragment;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,19 +50,26 @@ public class DailyWeatherActivity extends Fragment {
         current_city=(TextView)rootView.findViewById(R.id.current_city);
         current_temp=(TextView)rootView.findViewById(R.id.current_temp);
         current_icon=(ImageView)rootView.findViewById(R.id.current_icon);
-        dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
-        dialog.setTitle(getString(R.string.weather_details));
-        dialog.setMessage(getString(R.string.weather_loading));
-        dialog.setCancelable(false);
-        dialog.show();
-
         return rootView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        displayDailyWeather(new PlacePreference(getActivity()).getCity());
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            dialog = new ProgressDialog(getActivity(),R.style.MyTheme);
+            dialog.setTitle(getString(R.string.weather_details));
+            dialog.setMessage(getString(R.string.weather_loading));
+            dialog.setCancelable(false);
+            dialog.show();
+            displayDailyWeather(new PlacePreference(getActivity()).getCity());
+        }
+
     }
 
     private void displayDailyWeather(final String city){
@@ -75,13 +83,17 @@ public class DailyWeatherActivity extends Fragment {
                             dialog.dismiss();
                             if(((TabHostActivity)getActivity()).isNetworkAvailable()==false){
                                 ((TabHostActivity)getActivity()).showNetworkAlert();
+                            }else {
+                                Toast.makeText(getActivity(),"Not Able to Fetch the weather information",Toast.LENGTH_LONG).show();
+                                getActivity().finish();
                             }
                         }
                     });
                 } else {
                     handler.post(new Runnable(){
                         public void run(){
-                           updateDailyForecast(json);
+
+                            updateDailyForecast(json);
                         }
                     });
                 }
