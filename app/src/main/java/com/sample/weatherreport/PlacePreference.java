@@ -57,4 +57,20 @@ public class PlacePreference {
     {
         prefs.edit().putBoolean("firstRun", firstRun).commit();
     }
+
+    float getLat(){
+        return prefs.getFloat("lat", 0);
+    }
+    void setLat(float lat)
+    {
+        prefs.edit().putFloat("lat", lat).commit();
+    }
+    float getLong(){
+        return prefs.getFloat("longitude",0);
+    }
+    void setLong(float longitude)
+    {
+        prefs.edit().putFloat("longitude",longitude).commit();
+    }
+
 }

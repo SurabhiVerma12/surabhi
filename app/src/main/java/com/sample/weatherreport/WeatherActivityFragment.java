@@ -30,6 +30,7 @@ public class WeatherActivityFragment extends Fragment {
     TextView wind_value_text;
     TextView updatedField;
     Handler handler;
+    private String place_name;
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private static String OPEN_WEATHER_MAP_API = "http://api.openweathermap.org/data/2.5/weather?q=%s&units=metric";
     private ProgressDialog dialog = null;
@@ -125,12 +126,15 @@ public class WeatherActivityFragment extends Fragment {
                 textViewVisibility();
                 detailed_value.setText(
                         (weather.currentCondition.getCondition()).toUpperCase() + "(" + weather.currentCondition.getDescr() + ")");
-                humidity_value.setText( weather.currentCondition.getHumidity() + "%");
+                humidity_value.setText(weather.currentCondition.getHumidity() + "%");
                 pressure_value.setText(weather.currentCondition.getPressure() + " hPa");
                 wind_value.setText(weather.wind.getSpeed()+ "mps");
                 currentTemperature.setText(String.format("%.2f", weather.temperature.getTemp())+ " ℃");
                 new PlacePreference(getActivity()).setTemp(weather.temperature.getTemp() + "");
-                new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon()+"");
+                new PlacePreference(getActivity()).setIcon(weather.currentCondition.getIcon() + "");
+                new PlacePreference(getActivity()).setLat(weather.location.getLatitude());
+                new PlacePreference(getActivity()).setLong(weather.location.getLongitude());
+
                 DateFormat df = DateFormat.getDateTimeInstance();
                 String updatedOn = df.format(new Date(weather.location.getDate()*1000));
                 updatedField.setText("Last update: " + updatedOn);

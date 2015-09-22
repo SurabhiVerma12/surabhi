@@ -42,7 +42,7 @@
             android:windowSoftInputMode="stateHidden"
             >
         </activity>
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDm8d9Q8ZGl9Cyqb07fLtgU7sP3mKIhdCQ"/>
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBlBRr3IAejSrk1PpXDCzZ8Tn3kgzufMAc"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
 
